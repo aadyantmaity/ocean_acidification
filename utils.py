@@ -1,9 +1,6 @@
 import os
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
 from sklearn.preprocessing import MinMaxScaler
 
 def preprocess(filename):
@@ -22,28 +19,8 @@ def preprocess(filename):
         data = data.astype(float).values
 
         scaler = MinMaxScaler()
-        data = scaler.fit_transform(data)
+        data[:, :-1] = scaler.fit_transform(data[:, :-1])
 
         np.save(preprocessed_filename, data)
 
     return data
-
-
-def main():
-    data = preprocess('/Users/aadyant/Desktop/GLODAPDATA.csv')
-
-    inputs = data[:, :-1]
-    outputs = data[:, -1]
-
-    train_inputs, test_inputs, train_outputs, test_outputs = train_test_split(inputs, outputs, test_size=0.2, random_state=103)
-
-    model = RandomForestRegressor()
-    model.fit(train_inputs, train_outputs)
-
-    predictions = model.predict(test_inputs)
-
-    r2 = r2_score(test_outputs, predictions)
-    print("R^2 Score:", r2)
-
-if __name__ == '__main__':
-    main()
