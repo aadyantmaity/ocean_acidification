@@ -1,5 +1,5 @@
 from utils import preprocess
-import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -9,8 +9,8 @@ from sklearn.metrics import r2_score
 from sklearn.preprocessing import MinMaxScaler
 
 def perform_regression(model):
-    current_dir = os.getcwd()
-    filename = os.path.join(current_dir, 'GLODAPDATA.csv')
+    current_dir = Path.cwd()
+    filename = current_dir / 'GLODAPDATA.csv'
     data = preprocess(filename)
 
     inputs = data[:, :-1]
