@@ -30,7 +30,7 @@ def perform_regression(model):
     print(model.__class__.__name__, "R^2 Score:", r2)
 
 if __name__ == '__main__':
-    linear_regression_model = LinearRegression(fit_intercept=True)
+    linear_regression_model = LinearRegression()
     random_forest_model = RandomForestRegressor(n_estimators=100, max_depth=None, min_samples_split=3)
 
     perform_regression(linear_regression_model)
