@@ -24,7 +24,7 @@ def perform_regression(model):
 
 if __name__ == '__main__':
     linear_regression_model = LinearRegression()
-    random_forest_model = RandomForestRegressor(n_estimators=100, max_depth=None, min_samples_split=3)
+    random_forest_model = RandomForestRegressor(n_estimators=100, max_depth=None, min_samples_split=3, verbose=100, n_jobs=-1)
 
     perform_regression(linear_regression_model)
     perform_regression(random_forest_model)
