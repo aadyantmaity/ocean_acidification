@@ -17,10 +17,11 @@ def perform_regression(model):
 
     model.fit(train_inputs, train_targets)
 
-    predictions = model.predict(dev_inputs)
+    dev_predictions = model.predict(dev_inputs)
+    train_predictions = model.predict(train_inputs)
 
-    r2 = r2_score(dev_targets, predictions)
-    print(model.__class__.__name__, "R^2 Score:", r2)
+    print(model.__class__.__name__, "Training R^2 Score:", r2_score(train_targets, train_predictions))
+    print(model.__class__.__name__, "Dev R^2 Score:", r2_score(dev_targets, dev_predictions))
 
 if __name__ == '__main__':
     linear_regression_model = LinearRegression()
