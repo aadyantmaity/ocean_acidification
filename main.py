@@ -31,7 +31,6 @@ if __name__ == '__main__':
     random_forest_regressor = RandomForestRegressor(n_estimators=100, max_depth=None, min_samples_split=3, verbose=100, n_jobs=-1)
     svm_model = SVR(kernel='linear')
     mlp_model = MLPRegressor(hidden_layer_sizes=(25, 50, 10), batch_size=64, learning_rate_init=0.001, max_iter=200, verbose=True, random_state=0)
-    random_forest_classifier = RandomForestClassifier(n_estimators=100, random_state=0)
 
     perform_regression(linear_regression_model, "Linear Regression")
     perform_regression(random_forest_regressor, "Random Forest Regressor")
