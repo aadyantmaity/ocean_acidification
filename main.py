@@ -74,3 +74,18 @@ if __name__ == '__main__':
 
     plt.tight_layout()
     plt.show()
+
+    if isinstance(random_forest_regressor, RandomForestRegressor):
+        random_forest_regressor.fit(train_inputs, train_targets)
+        feature_importances = random_forest_regressor.feature_importances_
+        feature_names = ["G2Temperature", "G2 Salinity", "G2Oxygen", "G2aou", "G2talk", "G2cfc11", "G2cfc12", "G2phosphate", "G2pcfc12", "G2nitrate", "G2silicate", "G2phtsinsitutp"]
+
+        fig, ax = plt.subplots()
+        ax.bar(feature_names[:-1], feature_importances)
+        ax.set_xlabel('Features')
+        ax.set_ylabel('Importance')
+        ax.set_title('Feature Importances')
+
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
