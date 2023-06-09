@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score
+from sklearn.inspection import permutation_importance
 
 def perform_regression(model, model_name):
     current_dir = Path(__file__).parent
@@ -77,15 +78,17 @@ if __name__ == '__main__':
 
     if isinstance(random_forest_regressor, RandomForestRegressor):
         random_forest_regressor.fit(train_inputs, train_targets)
-        feature_importances = random_forest_regressor.feature_importances_
-        feature_names = ["G2Temperature", "G2 Salinity", "G2Oxygen", "G2aou", "G2talk", "G2cfc11", "G2cfc12", "G2phosphate", "G2pcfc12", "G2nitrate", "G2silicate", "G2phtsinsitutp"]
+        feature_names = ["G2Temperature", "G2 Salinity", "G2Oxygen", "G2aou", "G2talk", "G2cfc11", "G2cfc12", "G2phosphate", "G2pcfc12", "G2nitrate", "G2silicate"]
+        importances = random_forest_regressor.feature_importances_
+        result = permutation_importance(random_forest_regressor, train_inputs, train_targets, n_repeats=10, random_state=0)
+        importances_std = result.importances_std
 
         fig, ax = plt.subplots()
-        ax.bar(feature_names[:-1], feature_importances)
-        ax.set_xlabel('Features')
-        ax.set_ylabel('Importance')
-        ax.set_title('Feature Importances')
+        ax.bar(feature_names, importances, label='Feature Importance')
 
-        plt.xticks(rotation=45)
+        ax.set_ylabel('Importance')
+        ax.set_title('Feature Importance - Random Forest Regressor')
+        ax.legend()
+
         plt.tight_layout()
         plt.show()
