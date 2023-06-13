@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from utils import preprocess
 from pathlib import Path
 from sklearn.model_selection import train_test_split
@@ -73,10 +73,14 @@ def plot_feature_importance(model, train_inputs, train_targets, feature_names):
         plt.tight_layout()
         plt.show()
 
+def get_top_N_features(importances, N):
+    return np.argsort(importances)[-N:]
+
 if __name__ == '__main__':
     current_dir = Path(__file__).parent
     filename = current_dir / 'GLODAPv2.2022_Atlantic_Ocean.csv'
     feature_names = ["G2Temperature", "G2 Salinity", "G2Oxygen", "G2aou", "G2talk", "G2cfc11", "G2cfc12", "G2phosphate", "G2pcfc12", "G2nitrate", "G2silicate"]
+    N = 3
 
     inputs, outputs = preprocess_data(filename)
     train_inputs, dev_inputs, train_targets, dev_targets = split_data(inputs, outputs)
@@ -92,9 +96,19 @@ if __name__ == '__main__':
     dev_scores = []
 
     for model, model_name in zip(models, model_names):
-        train_model(model, train_inputs, train_targets)
-        train_score = evaluate_model(model, train_inputs, train_targets, model_name)
-        dev_score = evaluate_model(model, dev_inputs, dev_targets, model_name)
+        model.fit(train_inputs, train_targets)
+        if isinstance(model, RandomForestRegressor):
+            importances = model.feature_importances_
+            top_features_indices = get_top_N_features(importances, N)
+            top_train_inputs = train_inputs[:, top_features_indices]
+            top_dev_inputs = dev_inputs[:, top_features_indices]
+            train_model(model, top_train_inputs, train_targets)
+            train_score = evaluate_model(model, top_train_inputs, train_targets, model_name)
+            dev_score = evaluate_model(model, top_dev_inputs, dev_targets, model_name)
+        else:
+            train_score = evaluate_model(model, train_inputs, train_targets, model_name)
+            dev_score = evaluate_model(model, dev_inputs, dev_targets, model_name)
+
         train_scores.append(train_score)
         dev_scores.append(dev_score)
         plot_loss_curve(model, model_name)
