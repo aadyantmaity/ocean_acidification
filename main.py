@@ -41,8 +41,8 @@ def plot_model_performance(model_names, train_scores, dev_scores):
     x = np.arange(len(model_names))
 
     fig, ax = plt.subplots()
-    ax.plot(x, train_scores, marker='o', label='Training')
-    ax.plot(x, dev_scores, marker='o', label='Development')
+    ax.bar(x, train_scores, width=0.4, label='Training')
+    ax.bar(x + 0.4, dev_scores, width=0.4, label='Development')
 
     ax.set_ylabel('R^2 Score')
     ax.set_title('Model Performance')
