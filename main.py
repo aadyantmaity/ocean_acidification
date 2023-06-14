@@ -95,19 +95,21 @@ if __name__ == '__main__':
     train_scores = []
     dev_scores = []
 
+    random_forest_regressor.fit(train_inputs, train_targets)
+    importances = random_forest_regressor.feature_importances_
+    top_features_indices = get_top_N_features(importances, N)
+    top_train_inputs = train_inputs[:, top_features_indices]
+    top_dev_inputs = dev_inputs[:, top_features_indices]
+
     for model, model_name in zip(models, model_names):
-        model.fit(train_inputs, train_targets)
         if isinstance(model, RandomForestRegressor):
-            importances = model.feature_importances_
-            top_features_indices = get_top_N_features(importances, N)
-            top_train_inputs = train_inputs[:, top_features_indices]
-            top_dev_inputs = dev_inputs[:, top_features_indices]
             train_model(model, top_train_inputs, train_targets)
             train_score = evaluate_model(model, top_train_inputs, train_targets, model_name)
             dev_score = evaluate_model(model, top_dev_inputs, dev_targets, model_name)
         else:
-            train_score = evaluate_model(model, train_inputs, train_targets, model_name)
-            dev_score = evaluate_model(model, dev_inputs, dev_targets, model_name)
+            train_model(model, top_train_inputs, train_targets)
+            train_score = evaluate_model(model, top_train_inputs, train_targets, model_name)
+            dev_score = evaluate_model(model, top_dev_inputs, dev_targets, model_name)
 
         train_scores.append(train_score)
         dev_scores.append(dev_score)
