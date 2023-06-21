@@ -115,4 +115,7 @@ if __name__ == '__main__':
             # plot the curve with number of top N features on x-axis and performance on y axis
 
     plot_model_performance(models.keys(), train_scores, dev_scores)
+
     plot_feature_importance(random_forest_regressor, train_inputs, train_targets, feature_names)
+    plot_feature_importance(random_forest_regressor, train_inputs, train_targets, feature_names)
+
